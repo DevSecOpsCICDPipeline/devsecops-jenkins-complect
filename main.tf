@@ -1,5 +1,5 @@
 resource "aws_security_group" "jenkins_security_group" {
-  name = "${local.naming_prefix}-jenkens-sg"
+  name = "${local.name}-jenkens-sg"
   vpc_id = data.aws_vpc.default_vpc.id
   ingress {
     description = "JenkinsPort"
@@ -56,5 +56,6 @@ resource "aws_instance" "jenkins_server_ec2" {
   subnet_id = data.aws_subnets.default_public_subnets.ids[0]
   user_data = file("../scripts/install_build_tools.sh")
   availability_zone = data.aws_availability_zones.azs[0]
+  tags = merge(local.common_tags, { Name = "${local.name}-jenkins-server" })
 
 }
