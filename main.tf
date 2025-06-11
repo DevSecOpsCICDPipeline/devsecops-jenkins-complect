@@ -1,5 +1,5 @@
 resource "aws_security_group" "jenkins_security_group" {
-  name = "${local.naming_prefix}-jenkens-sg"
+  name = "${local.name}-jenkens-sg"
   vpc_id = data.aws_vpc.default_vpc.id
   ingress {
     description = "JenkinsPort"
