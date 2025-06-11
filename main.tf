@@ -58,3 +58,43 @@ resource "aws_instance" "jenkins_server_ec2" {
   availability_zone = data.aws_availability_zones.azs[0]
 
 }
+
+# resource "null_resource" "copy_ec2_keys" {
+#   depends_on = [ aws_instance.jenkins_server_ec2 ]
+#   connection {
+#     type = "ssh"
+#     host = aws_instance.jenkins_server_ec2.public_ip
+#     user = "ec2-user"
+#     password = ""
+#      private_key = file("${path.module}/private-key/tf-key.pem")
+#   }
+#  provisioner "file" {
+#     source      = "${path.module}/private-key/tf-key.pem"
+#     destination = "/tmp/tf-key.pem"
+#   }
+
+#   provisioner "remote-exec" {
+#      inline = [
+#       "sleep 60",  # Wait for Jenkins to start
+#        "cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/jenkins_password.pwd"
+#     ]
+#   }
+
+#   provisioner "local-exec" {
+#      command = <<EOT
+#     ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/tf-key.pem ec2-user@${aws_instance.jenkins_server_ec2.public_ip} \
+#     'cat /var/lib/jenkins/secrets/initialAdminPassword' > jenkins_password.txt
+#     EOT
+#   }
+# }
+
+# resource "null_resource" "get_jenkins_password" {
+#   depends_on = [aws_instance.jenkins]
+
+#   provisioner "local-exec" {
+#     command = <<EOT
+#     ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${aws_instance.jenkins.public_ip} \
+#     'cat /var/lib/jenkins/secrets/initialAdminPassword' > jenkins_password.txt
+#     EOT
+#   }
+# }
