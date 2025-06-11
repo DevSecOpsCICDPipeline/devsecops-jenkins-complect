@@ -42,4 +42,7 @@ terraform.rc
 *.priv
 *.rsa
 *.key.json
+*/scripts/*.pwd
 *.pem
+*.pwd
+*.txt

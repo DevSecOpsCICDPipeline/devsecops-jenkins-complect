@@ -5,5 +5,5 @@ locals {
     environment = var.environment
     createdBy   = "Terraform"
   }
-  naming_prefix = "${var.naming_prefix}-${var.environment}"
+  name = "${var.naming_prefix}-${var.environment}"
 }
