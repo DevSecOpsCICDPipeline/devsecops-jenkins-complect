@@ -2,30 +2,30 @@
 
 # Ref - https://www.jenkins.io/doc/book/installing/linux/
 # Installing jenkins
-sudo yum install wget -y
-sudo wget -O /etc/yum.repos.d/jenkins.repo \
-    https://pkg.jenkins.io/redhat/jenkins.repo
-sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io-2023.key
-sudo yum upgrade -y
+sudo apt-get update -y
+sudo apt install -y wget
+              # Add Jenkins key and repository
+sudo curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | tee \
+                /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+              echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+sudo https://pkg.jenkins.io/debian binary/ | tee \
+                /etc/apt/sources.list.d/jenkins.list > /dev/null
 # Add required dependencies for the jenkins package
-sudo yum install java-17-amazon-corretto-devel -y
-sudo yum install jenkins -y
-sudo systemctl daemon-reload
-
+apt-get install -y openjdk-17-jdk -y
+ # Install Jenkins
+sudo apt-get update -y
+sudo apt-get install -y jenkins
 # Starting Jenkins
 sudo systemctl enable jenkins
-sudo systemctl start jenkins
 sudo systemctl status jenkins
-echo "Jenkins server started"
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-echo "Jenkins server started"
 sudo mkdir -p /var/lib/jenkins/init.groovy.d
 sudo chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
 
 
 # # Ref - https://www.atlassian.com/git/tutorials/install-git
 # Installing git
-sudo yum install -y git
+sudo apt update && sudo apt install -y git
 git --version
 
 # # Installing Docker 
