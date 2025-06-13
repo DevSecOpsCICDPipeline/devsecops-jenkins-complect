@@ -19,11 +19,14 @@ sudo systemctl status jenkins
 echo "Jenkins server started"
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 echo "Jenkins server started"
+sudo mkdir -p /var/lib/jenkins/init.groovy.d
+sudo chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
+
 
 # # Ref - https://www.atlassian.com/git/tutorials/install-git
-# # Installing git
-# sudo yum install -y git
-# git --version
+# Installing git
+sudo yum install -y git
+git --version
 
 # # Installing Docker 
 # # Ref - https://www.cyberciti.biz/faq/how-to-install-docker-on-amazon-linux-2/

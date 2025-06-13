@@ -66,23 +66,34 @@ resource "null_resource" "copy_ec2_keys" {
     host        = aws_instance.jenkins_server_ec2.public_ip
     user        = "ec2-user"
     password    = ""
-    private_key = file("${path.module}/private-key/tf-key.pem")
+    private_key = file("${path.module}/private-key/${var.key_name}.pem")
   }
   provisioner "file" {
-    source      = "${path.module}/private-key/tf-key.pem"
-    destination = "/tmp/tf-key.pem"
+    source      = "${path.module}/private-key/${var.key_name}.pem"
+    destination = "/tmp/${var.key_name}.pem"
   }
+
+  provisioner "file" {
+    source      = "${path.module}/scripts/"
+    destination = "/tmp"
+  }
+
+
 
   provisioner "remote-exec" {
     inline = [
       "sleep 60", # Wait for Jenkins to start
-      "sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/jenkins_password.pwd"
+      "sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/jenkins_password.pwd",
+    #   "sudo cp /tmp/basic-security.groovy /var/lib/jenkins/init.groovy.d",
+      "sudo chmod 644 /var/lib/jenkins/init.groovy.d/*.groovy",
+      "sudo chmod 777 /tmp/*.sh",
+      "sudo systemctl restart jenkins"
     ]
   }
 
   provisioner "local-exec" {
     command = <<EOT
-    ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/tf-key.pem ec2-user@${aws_instance.jenkins_server_ec2.public_ip} \
+    ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/${var.key_name}.pem ec2-user@${aws_instance.jenkins_server_ec2.public_ip} \
     'sudo cat /var/lib/jenkins/secrets/initialAdminPassword' > jenkins_password.txt
     EOT
   }
