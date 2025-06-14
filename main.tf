@@ -50,54 +50,54 @@ resource "aws_security_group" "jenkins_security_group" {
 
 resource "aws_instance" "jenkins_server_ec2" {
   instance_type   = var.instance_tye
-  ami             = data.aws_ssm_parameter.ubuntu_2404.value
+  ami             = "ami-05472738145af44bf"
   key_name        = var.key_name
   security_groups = [aws_security_group.jenkins_security_group.id]
   subnet_id       = data.aws_subnets.default_public_subnets.ids[0]
-  user_data       = filebase64("${path.module}/scripts/install_build_tools.sh")
+#   user_data       = filebase64("${path.module}/scripts/install_build_tools.sh")
   # availability_zone = data.aws_availability_zones.azs[0]
   tags = merge(local.common_tags, { Name = "${local.name}-jenkins-server" })
 }
 
-resource "null_resource" "copy_ec2_keys" {
-  depends_on = [aws_instance.jenkins_server_ec2]
-  connection {
-    type        = "ssh"
-    host        = aws_instance.jenkins_server_ec2.public_ip
-    user        = "ubuntu"
-    password    = ""
-    private_key = file("${path.module}/private-key/${var.key_name}.pem")
-  }
-  provisioner "file" {
-    source      = "${path.module}/private-key/${var.key_name}.pem"
-    destination = "/tmp/${var.key_name}.pem"
-  }
+# resource "null_resource" "copy_ec2_keys" {
+#   depends_on = [aws_instance.jenkins_server_ec2]
+#   connection {
+#     type        = "ssh"
+#     host        = aws_instance.jenkins_server_ec2.public_ip
+#     user        = "ubuntu"
+#     password    = ""
+#     private_key = file("${path.module}/private-key/${var.key_name}.pem")
+#   }
+#   provisioner "file" {
+#     source      = "${path.module}/private-key/${var.key_name}.pem"
+#     destination = "/tmp/${var.key_name}.pem"
+#   }
 
-  provisioner "file" {
-    source      = "${path.module}/scripts/"
-    destination = "/tmp"
-  }
+#   provisioner "file" {
+#     source      = "${path.module}/scripts/"
+#     destination = "/tmp"
+#   }
 
 
 
-  provisioner "remote-exec" {
-    inline = [
-      "sleep 60", # Wait for Jenkins to start
-      "sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/jenkins_password.pwd",
-    #   "sudo cp /tmp/basic-security.groovy /var/lib/jenkins/init.groovy.d",
-      "sudo chmod 644 /var/lib/jenkins/init.groovy.d/*.groovy",
-      "sudo chmod 777 /tmp/*.sh",
-      "sudo systemctl restart jenkins"
-    ]
-  }
+#   provisioner "remote-exec" {
+#     inline = [
+#       "sleep 60", # Wait for Jenkins to start
+#       "sudo cat /var/lib/jenkins/secrets/initialAdminPassword > /tmp/jenkins_password.pwd",
+#     #   "sudo cp /tmp/basic-security.groovy /var/lib/jenkins/init.groovy.d",
+#       "sudo chmod 644 /var/lib/jenkins/init.groovy.d/*.groovy",
+#       "sudo chmod 777 /tmp/*.sh",
+#       "sudo systemctl restart jenkins"
+#     ]
+#   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-    ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/${var.key_name}.pem ubuntu@${aws_instance.jenkins_server_ec2.public_ip} \
-    'sudo cat /var/lib/jenkins/secrets/initialAdminPassword' > jenkins_password.txt
-    EOT
-  }
-}
+#   provisioner "local-exec" {
+#     command = <<EOT
+#     ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/${var.key_name}.pem ubuntu@${aws_instance.jenkins_server_ec2.public_ip} \
+#     'sudo cat /var/lib/jenkins/secrets/initialAdminPassword' > jenkins_password.txt
+#     EOT
+#   }
+# }
 
 # resource "null_resource" "get_jenkins_password" {
 #   depends_on = [aws_instance.jenkins]
