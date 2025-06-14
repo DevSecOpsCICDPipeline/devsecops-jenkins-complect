@@ -57,6 +57,12 @@ resource "aws_instance" "jenkins_server_ec2" {
 #   user_data       = filebase64("${path.module}/scripts/install_build_tools.sh")
   # availability_zone = data.aws_availability_zones.azs[0]
   tags = merge(local.common_tags, { Name = "${local.name}-jenkins-server" })
+    root_block_device {
+    volume_type = "gp3"
+    volume_size = 30           
+    delete_on_termination = true
+  }
+  
 }
 
 # resource "null_resource" "copy_ec2_keys" {
