@@ -1,32 +1,19 @@
 #!/bin/bash
 
-# Ref - https://www.jenkins.io/doc/book/installing/linux/
-# Installing jenkins
-sudo apt-get update -y
-sudo apt install -y wget
-              # Add Jenkins key and repository
-sudo curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | tee \
-                /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-              echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-sudo https://pkg.jenkins.io/debian binary/ | tee \
-                /etc/apt/sources.list.d/jenkins.list > /dev/null
-# Add required dependencies for the jenkins package
-apt-get install -y openjdk-17-jdk -y
- # Install Jenkins
-sudo apt-get update -y
-sudo apt-get install -y jenkins
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
+sudo echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y 
+sudo apt-get install fontconfig -y
+sudo apt-get install openjdk-17-jre -y
+sudo apt-get install jenkins -y
 # Starting Jenkins
 sudo systemctl enable jenkins
-sudo systemctl status jenkins
+sudo systemctl start jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 sudo mkdir -p /var/lib/jenkins/init.groovy.d
 sudo chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
-
-
-# # Ref - https://www.atlassian.com/git/tutorials/install-git
-# Installing git
-sudo apt update && sudo apt install -y git
-git --version
 
 # # Installing Docker 
 # # Ref - https://www.cyberciti.biz/faq/how-to-install-docker-on-amazon-linux-2/

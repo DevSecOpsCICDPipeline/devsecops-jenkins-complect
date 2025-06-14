@@ -50,7 +50,7 @@ resource "aws_security_group" "jenkins_security_group" {
 
 resource "aws_instance" "jenkins_server_ec2" {
   instance_type   = var.instance_tye
-  ami             = data.aws_ami.amazon-linux.id
+  ami             = data.aws_ssm_parameter.ubuntu_2404.value
   key_name        = var.key_name
   security_groups = [aws_security_group.jenkins_security_group.id]
   subnet_id       = data.aws_subnets.default_public_subnets.ids[0]
@@ -64,7 +64,7 @@ resource "null_resource" "copy_ec2_keys" {
   connection {
     type        = "ssh"
     host        = aws_instance.jenkins_server_ec2.public_ip
-    user        = "ec2-user"
+    user        = "ubuntu"
     password    = ""
     private_key = file("${path.module}/private-key/${var.key_name}.pem")
   }
@@ -93,7 +93,7 @@ resource "null_resource" "copy_ec2_keys" {
 
   provisioner "local-exec" {
     command = <<EOT
-    ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/${var.key_name}.pem ec2-user@${aws_instance.jenkins_server_ec2.public_ip} \
+    ssh -o StrictHostKeyChecking=no -i ${path.module}/private-key/${var.key_name}.pem ubuntu@${aws_instance.jenkins_server_ec2.public_ip} \
     'sudo cat /var/lib/jenkins/secrets/initialAdminPassword' > jenkins_password.txt
     EOT
   }

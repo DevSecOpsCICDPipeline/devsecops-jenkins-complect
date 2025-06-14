@@ -7,7 +7,7 @@ sudo systemctl restart jenkins
 #   --plugin-file plugins.txt \
 #   --plugin-download-directory /var/lib/jenkins/plugins -d plugins/plugins\
 #   --verbose
-
+#eaeae46e-cd3c-479b-9c21-6bd85497f290
 
 
 
