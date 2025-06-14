@@ -1,0 +1,55 @@
+https://github.com/NotHarshhaa/DevOps-Projects/tree/master/DevOps-Project-19
+**************Jenkins CLI*************************
+1.SSH
+
+curl -Lv https//JENKINS_URL/login 2>&1 | grep -i 'x-ssh-endpoint' < X-SSH-Endpoint: localhost:53801
+
+ssh -l username -p 53801 localhost help 
+
+ssh -l username -p 53801 localhost build hello-jenkins -f -v 
+
+2.JAR
+
+java -jar jenkins-cli.jar -s JENKINS_URL/ help
+
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ who-am-i
+
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ -auth 
+
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ -auth  list-jobs
+
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ install-plugin SOURCE ... [-deploy] [-name VAL] [-restart]
+
+1177f32a3ed45669508262dee9e2ff5d75
+
+java -jar jenkins-cli.jar -s JENKINS_URL/ -auth:token list-jobs
+java -jar jenkins-cli.jar -s JENKINS_URL/ -auth:token build job-name
+java -jar jenkins-cli.jar -s JENKINS_URL/ -auth:token get-job
+
+
+
+
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ install-plugin SOURCE ... [-deploy] [-name VAL] [-restart]
+
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ -auth admin:1177f32a3ed45669508262dee9e2ff5d75 install-plugin  docker-workflow:621.va_73f881d9232 -deploy
+java -jar jenkins-cli.jar -s http://ec2-3-234-230-247.compute-1.amazonaws.com:8080/ -auth admin:1177f32a3ed45669508262dee9e2ff5d75 install-plugin build-timeout:1.38 -deploy
+
+--plugins build-timeout:1.38
+
+
+
+3.API
+
+curl -s POST --data "<jenkins><install plugin='${plugin}' /><jenkins>" \
+-H 'Content-Type: text/xml' \
+http://localhost:8080/pluginManager/installNecessaryPlugins \
+--user admin:$JENKINS_TOKEN
+
+curl -u admin:1101616b94f4f3f2698451306fd8f8a7f26d6 \
+-X POST http://localhost:8080/pluginManager/installNecessaryPlugins \
+-d '<jenkins><install plugin="emotional-jenkins-plugin@1.2" /></jenkins>'
+
+-------------------------Jenkins--------------------
+tools {
+    maven "M3"
+}
