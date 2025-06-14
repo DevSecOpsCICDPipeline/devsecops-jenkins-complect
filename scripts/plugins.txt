@@ -1,0 +1,5 @@
+git
+workflow-aggregator
+blueocean
+job-dsl
+dependency-check-jenkins-plugin
