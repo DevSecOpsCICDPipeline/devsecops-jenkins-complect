@@ -45,4 +45,4 @@ terraform.rc
 */scripts/*.pwd
 *.pem
 *.pwd
-*.txt
+notes.txt
