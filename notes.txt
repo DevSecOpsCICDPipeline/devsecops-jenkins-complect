@@ -53,3 +53,7 @@ curl -u admin:1101616b94f4f3f2698451306fd8f8a7f26d6 \
 tools {
     maven "M3"
 }
+
+///sonarqube
+
+	

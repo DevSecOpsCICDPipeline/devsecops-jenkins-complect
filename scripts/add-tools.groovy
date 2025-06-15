@@ -3,6 +3,11 @@ import hudson.tools.*
 import hudson.tasks.Maven
 import jenkins.plugins.nodejs.tools.*
 import org.jenkinsci.plugins.DependencyCheck.tools.*
+import hudson.plugins.sonar.*
+import hudson.plugins.sonar.SonarRunnerInstallation
+import hudson.tools.InstallSourceProperty
+import hudson.tools.ToolProperty
+import hudson.plugins.sonar.SonarRunnerInstaller
 
 // Get Jenkins instance
 def jenkins = Jenkins.get()
@@ -27,6 +32,13 @@ def dcInstaller = new DependencyCheckInstaller("10.0.3")
 def dcTool = new DependencyCheckInstallation("DC_9", "", [new InstallSourceProperty([dcInstaller])])
 jenkins.getDescriptorByType(DependencyCheckInstallation.DescriptorImpl.class).setInstallations(dcTool)
 println "✅ OWASP Dependency-Check 9.0.10 added"
+
+def sonarInstaller = new SonarRunnerInstaller("5.0.1.3006")
+def installSource = new InstallSourceProperty([sonarInstaller])
+def sonarInstallation = new SonarRunnerInstallation("sonar-scanner-5.0", "", [installSource])
+def sonarDesc = instance.getDescriptor(SonarRunnerInstallation.class)
+sonarDesc.setInstallations(sonarInstallation)
+sonarDesc.save()
 
 jenkins.save()
 

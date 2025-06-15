@@ -3,3 +3,4 @@ workflow-aggregator
 blueocean
 job-dsl
 dependency-check-jenkins-plugin
+sonar:2.18
