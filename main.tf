@@ -50,7 +50,7 @@ resource "aws_security_group" "jenkins_security_group" {
 
 resource "aws_instance" "jenkins_server_ec2" {
   instance_type   = var.instance_tye
-  ami             = "ami-05472738145af44bf"
+  ami             = "ami-03c94151ba2466d60"
   key_name        = var.key_name
   security_groups = [aws_security_group.jenkins_security_group.id]
   subnet_id       = data.aws_subnets.default_public_subnets.ids[0]

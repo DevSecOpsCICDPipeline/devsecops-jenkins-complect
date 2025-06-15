@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get update -y
+# sudo apt-get update -y
 # sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
 # sudo echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 # sudo apt-get update -y 
@@ -15,19 +15,19 @@ sudo apt-get update -y
 # sudo chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
 
 # # Installing Docker 
-sudo apt install -y ca-certificates curl gnupg lsb-release
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-https://download.docker.com/linux/ubuntu \
-$(lsb_release -cs) stable" | \
-sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo usermod -aG docker $USER
-sudo usermod -aG docker jenkins
-newgrp docker
+# sudo apt install -y ca-certificates curl gnupg lsb-release
+# sudo install -m 0755 -d /etc/apt/keyrings
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+# echo \
+# "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+# https://download.docker.com/linux/ubuntu \
+# $(lsb_release -cs) stable" | \
+# sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# sudo apt-get update
+# sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# sudo usermod -aG docker $USER
+# sudo usermod -aG docker jenkins
+# newgrp docker
 # # Ref - https://www.cyberciti.biz/faq/how-to-install-docker-on-amazon-linux-2/
 # sudo yum update
 # sudo yum install docker -y
@@ -46,7 +46,8 @@ newgrp docker
 # sudo chmod 777 /var/run/docker.sock
 
 # # Run Docker Container of Sonarqube
-docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
+# docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
+
 
 # # Installing AWS CLI
 # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
