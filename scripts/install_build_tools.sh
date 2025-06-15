@@ -68,18 +68,17 @@
 # sudo mkdir -p $HOME/bin && sudo cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
 
 # # Installing Trivy
-# # Ref - https://aquasecurity.github.io/trivy-repo/
-# sudo tee /etc/yum.repos.d/trivy.repo << 'EOF'
-# [trivy]
-# name=Trivy repository
-# baseurl=https://aquasecurity.github.io/trivy-repo/rpm/releases/$basearch/
-# gpgcheck=1
-# enabled=1
-# gpgkey=https://aquasecurity.github.io/trivy-repo/rpm/public.key
-# EOF
+# Prerequisites
+# sudo apt update
+# sudo apt install -y gnupg curl ca-certificates lsb-release
 
-# sudo yum -y update
-# sudo yum -y install trivy
+# # Add Aqua Security GPG key
+# curl -fsSL https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/trivy.gpg > /dev/null
+
+# # Add the Trivy APT repository
+# echo "deb [arch=$(dpkg --print-architecture)] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+# sudo apt update
+# sudo apt install trivy
 
 # # Intalling Helm
 # # Ref - https://helm.sh/docs/intro/install/
