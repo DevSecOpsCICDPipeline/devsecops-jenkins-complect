@@ -101,6 +101,5 @@
 
 #kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
 #kubectl port-forward --address 0.0.0.0 service/argocd-server 31966:80 -n argocd
-
-kubectl port-forward --address 0.0.0.0 service/argocd-server 30000:8089
+#kubectl port-forward --address 0.0.0.0 service/frac-dev-sec-ops-service 8089:80
 
