@@ -148,7 +148,7 @@ data "aws_iam_policy_document" "s3_jenkins_role_doc" {
 }
 
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "${var.bucket}-${random_id.s3_suffix.id}"
+  bucket = "${var.bucket}-${random_id.s3_suffix.hex}"
 
 tags = merge(local.common_tags, { Name = "${local.name}" })
 }
