@@ -31,7 +31,7 @@ variable "key_name" {
 }
 
 variable "bucket" {
-  type    = string
+  type = string
 }
 
 variable "acl" {

@@ -24,7 +24,7 @@ data "aws_subnets" "default_public_subnets" {
 
 #   owners = ["099720109477"] # Canonical
 #   }
-  data "aws_ssm_parameter" "ubuntu_2404" {
+data "aws_ssm_parameter" "ubuntu_2404" {
   name = "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id"
 }
 

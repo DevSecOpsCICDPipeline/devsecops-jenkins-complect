@@ -39,7 +39,7 @@ resource "aws_security_group" "jenkins_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-    ingress {
+  ingress {
     description = "app"
     to_port     = 8089
     from_port   = 8089
@@ -47,7 +47,7 @@ resource "aws_security_group" "jenkins_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-      ingress {
+  ingress {
     description = "argocd"
     to_port     = 31966
     from_port   = 31966
@@ -70,16 +70,16 @@ resource "aws_instance" "jenkins_server_ec2" {
   key_name        = var.key_name
   security_groups = [aws_security_group.jenkins_security_group.id]
   subnet_id       = data.aws_subnets.default_public_subnets.ids[0]
-#   user_data       = filebase64("${path.module}/scripts/install_build_tools.sh")
+  #   user_data       = filebase64("${path.module}/scripts/install_build_tools.sh")
   # availability_zone = data.aws_availability_zones.azs[0]
   iam_instance_profile = aws_iam_instance_profile.s3_jenkins_profile.name
-  tags = merge(local.common_tags, { Name = "${local.name}-jenkins-server" })
-    root_block_device {
-    volume_type = "gp3"
-    volume_size = 30           
+  tags                 = merge(local.common_tags, { Name = "${local.name}-jenkins-server" })
+  root_block_device {
+    volume_type           = "gp3"
+    volume_size           = 30
     delete_on_termination = true
   }
-  
+
 }
 
 # resource "null_resource" "copy_ec2_keys" {
@@ -139,10 +139,10 @@ resource "random_id" "s3_suffix" {
 
 data "aws_iam_policy_document" "s3_jenkins_role_doc" {
   statement {
-    actions = [ "sts:AssumeRole" ]
+    actions = ["sts:AssumeRole"]
     principals {
-        type = "Service"
-      identifiers = [ "ec2.amazonaws.com" ]
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
     }
   }
 }
@@ -150,7 +150,7 @@ data "aws_iam_policy_document" "s3_jenkins_role_doc" {
 resource "aws_s3_bucket" "s3_bucket" {
   bucket = "${var.bucket}-${random_id.s3_suffix.id}"
 
-tags = merge(local.common_tags, { Name = "${local.name}" })
+  tags = merge(local.common_tags, { Name = "${local.name}" })
 }
 
 resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
@@ -161,9 +161,9 @@ resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
 }
 
 resource "aws_s3_bucket_acl" "s3_bucket_acl" {
-  bucket = aws_s3_bucket.s3_bucket.id
-  acl = var.acl
-  depends_on = [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership  ]
+  bucket     = aws_s3_bucket.s3_bucket.id
+  acl        = var.acl
+  depends_on = [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership]
 }
 
 
@@ -172,8 +172,8 @@ resource "aws_s3_bucket_acl" "s3_bucket_acl" {
 
 
 resource "aws_iam_role" "s3_jenkins_role" {
-  name = "${local.name}-s3-jenkins-role"
-  path = "/"
+  name               = "${local.name}-s3-jenkins-role"
+  path               = "/"
   assume_role_policy = data.aws_iam_policy_document.s3_jenkins_role_doc.json
 }
 
@@ -203,11 +203,11 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "name" {
-  role = aws_iam_role.s3_jenkins_role.name
+  role       = aws_iam_role.s3_jenkins_role.name
   policy_arn = aws_iam_policy.s3_jenkins_policy.arn
 }
 
 resource "aws_iam_instance_profile" "s3_jenkins_profile" {
-name = "${local.name}-s3-jenkins-profile"
-role = aws_iam_role.s3_jenkins_role.name
+  name = "${local.name}-s3-jenkins-profile"
+  role = aws_iam_role.s3_jenkins_role.name
 }
