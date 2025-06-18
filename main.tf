@@ -66,12 +66,13 @@ resource "aws_security_group" "jenkins_security_group" {
 
 resource "aws_instance" "jenkins_server_ec2" {
   instance_type   = var.instance_tye
-  ami             = "ami-09fe229efea037fbe"
+  ami             = "ami-064d4fb48e45b60fa"
   key_name        = var.key_name
   security_groups = [aws_security_group.jenkins_security_group.id]
   subnet_id       = data.aws_subnets.default_public_subnets.ids[0]
 #   user_data       = filebase64("${path.module}/scripts/install_build_tools.sh")
   # availability_zone = data.aws_availability_zones.azs[0]
+  iam_instance_profile = aws_iam_instance_profile.s3_jenkins_profile.name
   tags = merge(local.common_tags, { Name = "${local.name}-jenkins-server" })
     root_block_device {
     volume_type = "gp3"
@@ -131,3 +132,82 @@ resource "aws_instance" "jenkins_server_ec2" {
 #     EOT
 #   }
 # }
+
+resource "random_id" "s3_suffix" {
+  byte_length = 8
+}
+
+data "aws_iam_policy_document" "s3_jenkins_role_doc" {
+  statement {
+    actions = [ "sts:AssumeRole" ]
+    principals {
+        type = "Service"
+      identifiers = [ "ec2.amazonaws.com" ]
+    }
+  }
+}
+
+resource "aws_s3_bucket" "s3_bucket" {
+  bucket = "${var.bucket}-${random_id.s3_suffix.id}"
+
+tags = merge(local.common_tags, { Name = "${local.name}" })
+}
+
+resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
+  bucket = aws_s3_bucket.s3_bucket.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
+resource "aws_s3_bucket_acl" "s3_bucket_acl" {
+  bucket = aws_s3_bucket.s3_bucket.id
+  acl = var.acl
+  depends_on = [aws_s3_bucket_ownership_controls.s3_bucket_acl_ownership  ]
+}
+
+
+
+
+
+
+resource "aws_iam_role" "s3_jenkins_role" {
+  name = "${local.name}-s3-jenkins-role"
+  path = "/"
+  assume_role_policy = data.aws_iam_policy_document.s3_jenkins_role_doc.json
+}
+
+resource "aws_iam_policy" "s3_jenkins_policy" {
+
+  name   = "s3-jenkins-rw-policy"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3ReadWriteAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.bucket}",
+        "arn:aws:s3:::${var.bucket}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "name" {
+  role = aws_iam_role.s3_jenkins_role.name
+  policy_arn = aws_iam_policy.s3_jenkins_policy.arn
+}
+
+resource "aws_iam_instance_profile" "s3_jenkins_profile" {
+name = "${local.name}-s3-jenkins-profile"
+role = aws_iam_role.s3_jenkins_role.name
+}

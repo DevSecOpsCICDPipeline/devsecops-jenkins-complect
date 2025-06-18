@@ -29,3 +29,11 @@ variable "instance_tye" {
 variable "key_name" {
   type = string
 }
+
+variable "bucket" {
+  type    = string
+}
+
+variable "acl" {
+  type = string
+}
