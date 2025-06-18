@@ -103,3 +103,8 @@
 #kubectl port-forward --address 0.0.0.0 service/argocd-server 31966:80 -n argocd
 #kubectl port-forward --address 0.0.0.0 service/frac-dev-sec-ops-service 8089:80
 
+
+
+# kubectl create namespace argocd
+# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+# kubectl edit svc argocd-server -n argocd
