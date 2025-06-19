@@ -7,3 +7,9 @@ sonar:2.18
 nodejs:1.6.4
 docker-plugin:1.10.0
 docker-workflow:621.va_73f881d9232
+pipeline-aws:1.45
+authorize-project:2.0.0
+job-restrictions:216.v0732cc7fb_076
+jobConfigHistory:1330.vcb_8320ea_cdb_e
+build-monitor-plugin:1.14-985.v7b_f37b_3d0b_f5
+monitoring:2.5.0

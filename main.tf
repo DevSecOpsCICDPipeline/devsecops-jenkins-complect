@@ -193,8 +193,8 @@ resource "aws_iam_policy" "s3_jenkins_policy" {
         "s3:ListBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.bucket}",
-        "arn:aws:s3:::${var.bucket}/*"
+        "arn:aws:s3:::${aws_s3_bucket.s3_bucket.id}",
+        "arn:aws:s3:::${aws_s3_bucket.s3_bucket.id}/*"
       ]
     }
   ]
