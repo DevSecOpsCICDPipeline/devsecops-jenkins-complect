@@ -13,3 +13,4 @@ job-restrictions:216.v0732cc7fb_076
 jobConfigHistory:1330.vcb_8320ea_cdb_e
 build-monitor-plugin:1.14-985.v7b_f37b_3d0b_f5
 monitoring:2.5.0
+kubernetes:4353.vb_47977da_9417
